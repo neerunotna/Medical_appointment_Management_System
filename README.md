@@ -1,2 +1,2 @@
 # Medmanual
-A college medical cell Manager
+Mern Stack project
