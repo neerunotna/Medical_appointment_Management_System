@@ -9,7 +9,7 @@ const messageSchema = new mongoose.Schema({
   },
   lastName: {
     type: String,
-    required: true,
+    required:true,
     minLength: [3, "Last Name Must Contain At Least 3 Characters!"],
   },
   email: {
@@ -20,8 +20,8 @@ const messageSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
-    minLength: [11, "Phone Number Must Contain Exact 11 Digits!"],
-    maxLength: [11, "Phone Number Must Contain Exact 11 Digits!"],
+    minLength: [10, "Phone Number Must Contain Exact 10 Digits!"],
+    maxLength: [10, "Phone Number Must Contain Exact 10 Digits!"],
   },
   message: {
     type: String,
@@ -30,4 +30,4 @@ const messageSchema = new mongoose.Schema({
   },
 });
 
-export const Message = mongoose.model("Message", messageSchema);
+export const Message = mongoose.model("messages", messageSchema);

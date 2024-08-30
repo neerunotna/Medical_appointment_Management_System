@@ -4,15 +4,14 @@ import ErrorHandler from "../middlewares/error.js";
 import { generateToken } from "../utils/jwtToken.js";
 import cloudinary from "cloudinary";
 
-export const patientRegister = catchAsyncErrors(async (req, res, next) => {
-  const { firstName, lastName, email, phone, nic, dob, gender, password } =
+export const userRegister = catchAsyncErrors(async (req, res, next) => {
+  const { firstName, lastName, email, phone, dob, gender, password } =
     req.body;
   if (
     !firstName ||
     !lastName ||
     !email ||
     !phone ||
-    !nic ||
     !dob ||
     !gender ||
     !password
@@ -30,7 +29,6 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,
@@ -61,18 +59,18 @@ export const login = catchAsyncErrors(async (req, res, next) => {
   if (role !== user.role) {
     return next(new ErrorHandler(`User Not Found With This Role!`, 400));
   }
-  generateToken(user, "Login Successfully!", 201, res);
+ 
+  generateToken(user, "Login Successfully!", 200, res);
 });
 
 export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
-  const { firstName, lastName, email, phone, nic, dob, gender, password } =
+  const { firstName, lastName, email, phone, dob, gender, password } =
     req.body;
   if (
     !firstName ||
     !lastName ||
     !email ||
     !phone ||
-    !nic ||
     !dob ||
     !gender ||
     !password
@@ -82,7 +80,7 @@ export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
 
   const isRegistered = await User.findOne({ email });
   if (isRegistered) {
-    return next(new ErrorHandler("Admin With This Email Already Exists!", 400));
+    return next(new ErrorHandler(`${isRegistered.role} With This Email Already Exists!`, 400));
   }
 
   const admin = await User.create({
@@ -90,7 +88,6 @@ export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,
@@ -117,7 +114,6 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,
@@ -128,7 +124,6 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
     !lastName ||
     !email ||
     !phone ||
-    !nic ||
     !dob ||
     !gender ||
     !password ||
@@ -140,7 +135,7 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
   const isRegistered = await User.findOne({ email });
   if (isRegistered) {
     return next(
-      new ErrorHandler("Doctor With This Email Already Exists!", 400)
+      new ErrorHandler(`${isRegistered.role} With This Email Already Exists!`, 400)
     );
   }
   const cloudinaryResponse = await cloudinary.uploader.upload(
@@ -160,7 +155,6 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,
@@ -209,7 +203,7 @@ export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Logout function for frontend patient
-export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
+export const logoutuser = catchAsyncErrors(async (req, res, next) => {
   res
     .status(201)
     .cookie("patientToken", "", {

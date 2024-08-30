@@ -7,14 +7,15 @@ import fileUpload from "express-fileupload";
 import { errorMiddleware } from "./middlewares/error.js";
 import messageRouter from "./router/messageRouter.js";
 import userRouter from "./router/userRouter.js";
-import appointmentRouter from "./router/appointmentRouter.js";
+import recordRouter from "./router/recordRouter.js";
+import eventRouter from "./router/eventRouter.js";
 
 const app = express();
-config({ path: "./config.env" });
+config({ path: "./config/config.env" });
 
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL_ONE, process.env.FRONTEND_URL_TWO],
+    origin: [process.env.FRONTEND_URL, process.env.DASHBOARD_URL],
     method: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
@@ -32,9 +33,9 @@ app.use(
 );
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
-app.use("/api/v1/appointment", appointmentRouter);
-
-dbConnection();
+app.use("/api/v1/record", recordRouter);
+app.use("/api/v1/events", eventRouter);
+ dbConnection();
 
 app.use(errorMiddleware);
 export default app;
